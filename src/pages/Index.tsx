@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState , useEffect } from 'react';
 import { Stage } from '@/types/game';
 import TitleScreen from '@/components/game/TitleScreen';
 import StageSelect from '@/components/game/StageSelect';
@@ -22,6 +22,44 @@ const Index = () => {
     authentication: 0,
     authorization: 0,
   });
+
+    useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+
+  if (!params.has('next-stage')) return;
+
+  fetch('/api/next-stage.json')
+    .then(res => res.json())
+    .then(data => {
+      if (data.stage === 'authorization') {
+        setCurrentStage('authorization');
+        setScreen('playing');
+      }
+    })
+    .catch(() => {});
+}, []);
+
+useEffect(() => {
+  const saved = localStorage.getItem('ctf-progress');
+  if (saved) {
+    const data = JSON.parse(saved);
+    setCompletedStages(data.completedStages || []);
+    setAffection(data.affection || {});
+    setStageCompletionCount(data.stageCompletionCount || {});
+  }
+}, []);
+
+useEffect(() => {
+  localStorage.setItem(
+    'ctf-progress',
+    JSON.stringify({
+      completedStages,
+      affection,
+      stageCompletionCount,
+    })
+  );
+}, [completedStages, affection, stageCompletionCount]);
+
 
   const handleStart = () => {
     setScreen('select');
