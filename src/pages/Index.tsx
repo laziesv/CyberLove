@@ -4,6 +4,7 @@ import TitleScreen from '@/components/game/TitleScreen';
 import StageSelect from '@/components/game/StageSelect';
 import GameStage from '@/components/game/GameStage';
 import VictoryScreen from '@/components/game/VictoryScreen';
+import { dialogs } from '@/data/dialogs';
 
 type GameScreen = 'title' | 'select' | 'playing' | 'victory';
 
@@ -15,6 +16,11 @@ const Index = () => {
     cipher: 0,
     vera: 0,
     aria: 0,
+  });
+  const [stageCompletionCount, setStageCompletionCount] = useState<Record<Stage, number>>({
+    cryptography: 0,
+    authentication: 0,
+    authorization: 0,
   });
 
     useEffect(() => {
@@ -51,6 +57,12 @@ const Index = () => {
       ...prev,
       [charId]: finalAffection,
     }));
+    
+    // Increment completion count for the current stage
+    setStageCompletionCount(prev => ({
+      ...prev,
+      [currentStage]: (prev[currentStage] || 0) + 1,
+    }));
 
     if (!completedStages.includes(currentStage)) {
       const newCompleted = [...completedStages, currentStage];
@@ -78,6 +90,11 @@ const Index = () => {
       vera: 0,
       aria: 0,
     });
+    setStageCompletionCount({
+      cryptography: 0,
+      authentication: 0,
+      authorization: 0,
+    });
     setCurrentStage('cryptography');
     setScreen('title');
   };
@@ -90,6 +107,14 @@ const Index = () => {
     };
     return affection[characterIds[stage]] || 0;
   };
+
+  const getStageLevel = (stage: Stage): number => {
+    const count = stageCompletionCount[stage] || 0;
+    const numberOfLevels = dialogs[stage]?.length || 1;
+    // Loop through available dialog levels. If a stage is not yet completed, `count` will be 0.
+    // After first completion, count becomes 1, so we play level 1.
+    return count % numberOfLevels;
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -105,6 +130,7 @@ const Index = () => {
       {screen === 'playing' && (
         <GameStage
           stage={currentStage}
+          stageLevel={getStageLevel(currentStage)}
           affection={getInitialAffection(currentStage)}
           onComplete={handleStageComplete}
           onBack={handleBack}
