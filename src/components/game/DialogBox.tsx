@@ -4,6 +4,7 @@ import { characters } from '@/data/characters';
 import { useState, useEffect } from 'react';
 import CaesarCipher from './CaesarCipher';
 import FillInTheBlank from './FillInTheBlank';
+import MultiSelectChallenge from './MultiSelectChallenge';
 
 interface DialogBoxProps {
   dialog: DialogLine;
@@ -43,6 +44,13 @@ const DialogBox = ({
       case 'fill_in_the_blank':
         return (
           <FillInTheBlank
+            challenge={challenge}
+            onComplete={(correct) => onChallengeComplete(correct, challenge)}
+          />
+        );
+      case 'multi_select':
+        return (
+          <MultiSelectChallenge
             challenge={challenge}
             onComplete={(correct) => onChallengeComplete(correct, challenge)}
           />
