@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState , useEffect } from 'react';
 import { Stage } from '@/types/game';
 import TitleScreen from '@/components/game/TitleScreen';
 import StageSelect from '@/components/game/StageSelect';
@@ -22,6 +22,18 @@ const Index = () => {
     authentication: 0,
     authorization: 0,
   });
+
+    useEffect(() => {
+  fetch('/api/next-stage.json')
+    .then(res => res.json())
+    .then(data => {
+      if (data.stage === 'authorization') {
+        setCurrentStage('authorization');
+        setScreen('playing');
+      }
+    })
+    .catch(() => {});
+}, []);
 
   const handleStart = () => {
     setScreen('select');
