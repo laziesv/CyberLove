@@ -1,5 +1,5 @@
 export type Stage = 'cryptography' | 'authentication' | 'authorization';
-export type ChallengeType = 'caesar_cipher' | 'fill_in_the_blank';
+export type ChallengeType = 'caesar_cipher' | 'fill_in_the_blank' | 'multi_select';
 
 export interface Character {
   id: string;
@@ -36,6 +36,7 @@ export interface Challenge {
   incorrectResponse: string;
   incorrectAffectionChange: number;
   hint?: string;
+  options?: { id: string; text: string }[];
 }
 
 export interface GameState {
