@@ -33,10 +33,13 @@ const stages: { id: Stage; name: string; emoji: string; description: string }[] 
 
 const StageSelect = ({ completedStages, currentStage, onSelectStage, affection }: StageSelectProps) => {
   const isStageUnlocked = (stage: Stage): boolean => {
-    const stageIndex = stages.findIndex(s => s.id === stage);
-    if (stageIndex === 0) return true;
-    const prevStage = stages[stageIndex - 1];
-    return completedStages.includes(prevStage.id);
+  if (stage === 'authorization') return false; // fake lock
+
+  const stageIndex = stages.findIndex(s => s.id === stage);
+  if (stageIndex === 0) return true;
+
+  const prevStage = stages[stageIndex - 1];
+  return completedStages.includes(prevStage.id);
   };
 
   const isStageCompleted = (stage: Stage): boolean => {
