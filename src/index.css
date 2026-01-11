@@ -1,0 +1,217 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 280 50% 6%;
+    --foreground: 330 100% 95%;
+
+    --card: 280 40% 12%;
+    --card-foreground: 330 100% 95%;
+
+    --popover: 280 40% 10%;
+    --popover-foreground: 330 100% 95%;
+
+    --primary: 330 80% 65%;
+    --primary-foreground: 280 50% 6%;
+
+    --secondary: 280 60% 25%;
+    --secondary-foreground: 330 100% 95%;
+
+    --muted: 280 30% 20%;
+    --muted-foreground: 280 20% 60%;
+
+    --accent: 190 100% 60%;
+    --accent-foreground: 280 50% 6%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 280 40% 25%;
+    --input: 280 40% 20%;
+    --ring: 330 80% 65%;
+
+    --radius: 1rem;
+
+    /* Custom game colors */
+    --love-pink: 330 80% 65%;
+    --love-pink-glow: 330 100% 75%;
+    --cyber-purple: 280 60% 50%;
+    --cyber-blue: 190 100% 60%;
+    --soft-lavender: 270 50% 80%;
+    --heart-red: 350 90% 60%;
+
+    /* Gradients */
+    --gradient-love: linear-gradient(135deg, hsl(330 80% 65%), hsl(280 60% 50%));
+    --gradient-cyber: linear-gradient(135deg, hsl(280 60% 50%), hsl(190 100% 60%));
+    --gradient-bg: radial-gradient(ellipse at top, hsl(280 50% 15%), hsl(280 50% 6%));
+
+    /* Shadows */
+    --shadow-glow: 0 0 30px hsl(330 80% 65% / 0.4);
+    --shadow-cyber: 0 0 20px hsl(190 100% 60% / 0.3);
+
+    --sidebar-background: 280 50% 8%;
+    --sidebar-foreground: 330 100% 95%;
+    --sidebar-primary: 330 80% 65%;
+    --sidebar-primary-foreground: 280 50% 6%;
+    --sidebar-accent: 280 40% 20%;
+    --sidebar-accent-foreground: 330 100% 95%;
+    --sidebar-border: 280 40% 25%;
+    --sidebar-ring: 330 80% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'M PLUS Rounded 1c', 'Noto Sans Thai', sans-serif;
+    background: var(--gradient-bg);
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .text-gradient-love {
+    background: var(--gradient-love);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-cyber {
+    background: var(--gradient-cyber);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glow-pink {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .glow-cyber {
+    box-shadow: var(--shadow-cyber);
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .animate-typing {
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typing 0.5s steps(20, end);
+  }
+
+  .animate-heartbeat {
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+
+  .animate-sparkle {
+    animation: sparkle 2s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 20px hsl(330 80% 65% / 0.4);
+  }
+  50% { 
+    box-shadow: 0 0 40px hsl(330 80% 65% / 0.6);
+  }
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.1); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.05); }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Visual Novel specific styles */
+
+/* Dialog Box */
+.vn-dialog-box {
+  background: hsl(280 40% 12% / 0.35); /* โปร่งใสประมาณ 35% */
+  border: 2px solid hsl(330 80% 65% / 0.5); /* ขอบสีชมพู */
+  backdrop-filter: blur(12px); /* เบลอพื้นหลังเล็กน้อย */
+  border-radius: 1.5rem; /* ให้กล่องมน ๆ */
+  padding: 1.5rem;
+  position: relative;
+  cursor: pointer;
+  min-height: 120px;
+  transition: all 0.3s ease;
+}
+
+/* Choices inside Dialog */
+.vn-choice-button {
+  background: linear-gradient(135deg, 
+    hsl(280 40% 15% / 0.6) 0%, 
+    hsl(280 50% 12% / 0.6) 100%
+  ); /* gradient โปร่งใสเล็กน้อย ให้เข้ากับ dialog box */
+  border: 2px solid hsl(330 80% 65% / 0.5); /* ขอบชมพูตรงกับ dialog */
+  border-radius: 1rem;
+  padding: 1rem;
+  width: 100%;
+  text-align: left;
+  color: hsl(0 0% 100%);
+  font-weight: 500;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px); /* เพิ่ม blur เล็กน้อยให้ choice */
+}
+
+/* Hover effect for choices */
+.vn-choice-button:hover {
+  border-color: hsl(330 80% 65%);
+  box-shadow: 0 0 20px hsl(330 80% 65% / 0.4);
+  transform: translateX(8px) scale(1.02);
+  background: linear-gradient(135deg, 
+    hsl(280 50% 20% / 0.8) 0%, 
+    hsl(280 60% 18% / 0.8) 100%
+  ); /* ทำ gradient สว่างขึ้นเมื่อ hover */
+}
+
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(280 50% 10%);
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(330 80% 65% / 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(330 80% 65%);
+}

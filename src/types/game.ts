@@ -1,0 +1,32 @@
+export type Stage = 'cryptography' | 'authentication' | 'authorization';
+
+export interface Character {
+  id: string;
+  name: string;
+  stage: Stage;
+  avatar: string;
+  description: string;
+  affection: number;
+}
+
+export interface DialogLine {
+  character?: string;
+  text: string;
+  isChoice?: boolean;
+  choices?: Choice[];
+}
+
+export interface Choice {
+  id: string;
+  text: string;
+  correct: boolean;
+  response: string;
+  affectionChange: number;
+}
+
+export interface GameState {
+  currentStage: Stage;
+  stagesCompleted: Stage[];
+  affection: Record<string, number>;
+  currentDialog: number;
+}
