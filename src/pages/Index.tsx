@@ -1,9 +1,11 @@
 import { useState , useEffect } from 'react';
+import { useState , useEffect } from 'react';
 import { Stage } from '@/types/game';
 import TitleScreen from '@/components/game/TitleScreen';
 import StageSelect from '@/components/game/StageSelect';
 import GameStage from '@/components/game/GameStage';
 import VictoryScreen from '@/components/game/VictoryScreen';
+import { dialogs } from '@/data/dialogs';
 import { dialogs } from '@/data/dialogs';
 
 type GameScreen = 'title' | 'select' | 'playing' | 'victory';
@@ -98,6 +100,12 @@ useEffect(() => {
       ...prev,
       [currentStage]: (prev[currentStage] || 0) + 1,
     }));
+    
+    // Increment completion count for the current stage
+    setStageCompletionCount(prev => ({
+      ...prev,
+      [currentStage]: (prev[currentStage] || 0) + 1,
+    }));
 
     if (!completedStages.includes(currentStage)) {
       const newCompleted = [...completedStages, currentStage];
@@ -151,6 +159,39 @@ useEffect(() => {
   };
   // DEV: End of skip function
 
+  // DEV: Function to skip stages for testing
+  const handleStageSkip = (stageToSkip: Stage) => {
+    const characterIds: Record<Stage, string> = {
+      cryptography: 'cipher',
+      authentication: 'vera',
+      authorization: 'aria',
+    };
+
+    const charId = characterIds[stageToSkip];
+    
+    // Set max affection for skipped stage
+    setAffection(prev => ({
+      ...prev,
+      [charId]: 100,
+    }));
+    
+    // Increment completion count
+    setStageCompletionCount(prev => ({
+      ...prev,
+      [stageToSkip]: (prev[stageToSkip] || 0) + 1,
+    }));
+
+    if (!completedStages.includes(stageToSkip)) {
+      const newCompleted = [...completedStages, stageToSkip];
+      setCompletedStages(newCompleted);
+
+      if (newCompleted.length === 3) {
+        setScreen('victory');
+      }
+    }
+  };
+  // DEV: End of skip function
+
   const handleRestart = () => {
     sessionStorage.removeItem('ctf-progress');
     setCompletedStages([]);
@@ -158,6 +199,11 @@ useEffect(() => {
       cipher: 0,
       vera: 0,
       aria: 0,
+    });
+    setStageCompletionCount({
+      cryptography: 0,
+      authentication: 0,
+      authorization: 0,
     });
     setStageCompletionCount({
       cryptography: 0,
@@ -185,6 +231,14 @@ useEffect(() => {
     return count % numberOfLevels;
   }
 
+  const getStageLevel = (stage: Stage): number => {
+    const count = stageCompletionCount[stage] || 0;
+    const numberOfLevels = dialogs[stage]?.length || 1;
+    // Loop through available dialog levels. If a stage is not yet completed, `count` will be 0.
+    // After first completion, count becomes 1, so we play level 1.
+    return count % numberOfLevels;
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {screen === 'title' && <TitleScreen onStart={handleStart} />}
@@ -197,11 +251,15 @@ useEffect(() => {
           // DEV: Prop for skipping stages
           onStageSkip={handleStageSkip}
           // DEV: End of skip prop
+          // DEV: Prop for skipping stages
+          onStageSkip={handleStageSkip}
+          // DEV: End of skip prop
         />
       )}
       {screen === 'playing' && (
         <GameStage
           stage={currentStage}
+          stageLevel={getStageLevel(currentStage)}
           stageLevel={getStageLevel(currentStage)}
           affection={getInitialAffection(currentStage)}
           onComplete={handleStageComplete}
