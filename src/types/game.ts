@@ -1,5 +1,5 @@
 export type Stage = 'cryptography' | 'authentication' | 'authorization';
-export type ChallengeType = 'caesar_cipher' | 'fill_in_the_blank' | 'multi_select';
+export type ChallengeType = 'caesar_cipher' | 'fill_in_the_blank' | 'multi_select' | 'scytale';
 
 export interface Character {
   id: string;

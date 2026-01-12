@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import CaesarCipher from './CaesarCipher';
 import FillInTheBlank from './FillInTheBlank';
 import MultiSelectChallenge from './MultiSelectChallenge';
+import  ScytaleCipher  from './ScytaleCipher';
 
 interface DialogBoxProps {
   dialog: DialogLine;
@@ -51,6 +52,13 @@ const DialogBox = ({
       case 'multi_select':
         return (
           <MultiSelectChallenge
+            challenge={challenge}
+            onComplete={(correct) => onChallengeComplete(correct, challenge)}
+          />
+        );
+        case 'scytale':
+        return (
+          <ScytaleCipher
             challenge={challenge}
             onComplete={(correct) => onChallengeComplete(correct, challenge)}
           />
