@@ -23,12 +23,10 @@ const Index = () => {
     authorization: 0,
   });
 
-useEffect(() => {
+    useEffect(() => {
   const params = new URLSearchParams(window.location.search);
-  const auth = sessionStorage.getItem('auth_hint');
 
   if (!params.has('next-stage')) return;
-  if (auth !== 'verified') return;
 
   fetch('/api/next-stage.json')
     .then(res => res.json())
@@ -62,13 +60,6 @@ useEffect(() => {
   );
 }, [completedStages, affection, stageCompletionCount]);
 
-useEffect(() => {
-  fetch('/?next-stage', { cache: 'no-store' }).catch(() => {});
-}, []);
-
-useEffect(() => {
-  sessionStorage.setItem('To continue', '/?next-stage');
-}, []);
 
   const handleStart = () => {
     setScreen('select');
@@ -152,7 +143,6 @@ useEffect(() => {
   // DEV: End of skip function
 
   const handleRestart = () => {
-    sessionStorage.removeItem('ctf-progress');
     setCompletedStages([]);
     setAffection({
       cipher: 0,
