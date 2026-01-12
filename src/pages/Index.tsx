@@ -23,10 +23,12 @@ const Index = () => {
     authorization: 0,
   });
 
-    useEffect(() => {
+useEffect(() => {
   const params = new URLSearchParams(window.location.search);
+  const auth = sessionStorage.getItem('auth_hint');
 
   if (!params.has('next-stage')) return;
+  if (auth !== 'verified') return;
 
   fetch('/api/next-stage.json')
     .then(res => res.json())
@@ -40,7 +42,7 @@ const Index = () => {
 }, []);
 
 useEffect(() => {
-  const saved = localStorage.getItem('ctf-progress');
+  const saved = sessionStorage.getItem('ctf-progress');
   if (saved) {
     const data = JSON.parse(saved);
     setCompletedStages(data.completedStages || []);
@@ -50,7 +52,7 @@ useEffect(() => {
 }, []);
 
 useEffect(() => {
-  localStorage.setItem(
+  sessionStorage.setItem(
     'ctf-progress',
     JSON.stringify({
       completedStages,
@@ -60,6 +62,13 @@ useEffect(() => {
   );
 }, [completedStages, affection, stageCompletionCount]);
 
+useEffect(() => {
+  fetch('/?next-stage', { cache: 'no-store' }).catch(() => {});
+}, []);
+
+useEffect(() => {
+  sessionStorage.setItem('To continue', '/?next-stage');
+}, []);
 
   const handleStart = () => {
     setScreen('select');
@@ -143,6 +152,7 @@ useEffect(() => {
   // // DEV: End of skip function
 
   const handleRestart = () => {
+    sessionStorage.removeItem('ctf-progress');
     setCompletedStages([]);
     setAffection({
       cipher: 0,
