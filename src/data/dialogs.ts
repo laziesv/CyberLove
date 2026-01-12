@@ -187,8 +187,111 @@ export const dialogs: Record<Stage, DialogLine[][]> = {
         },
       },
       {
+        text: 'คุณเปิดอ่านไฟล์ได้ ฮูเต๋าใบหน้าแดงก่ำ',
+      },
+      {
         character: 'vera',
-        text: 'มาดูสถานการณ์นี้กัน: แอปธนาคารที่มีความปลอดภัยสูง กำหนดให้พนักงานต้องเข้าระบบจากที่ทำงานเท่านั้น โดยใช้รหัสผ่านส่วนตัว, ลายนิ้วมือ, และต้องเชื่อมต่อจาก IP ที่ทำงาน',
+        text: 'คุณ... คุณอ่านไดอารี่ของฉันแล้วเหรอ!?',
+      },
+      {
+        text: 'จะตอบว่าไงดี:',
+        isChoice: true,
+        choices: [
+          {
+            id: '1',
+            text: 'ขอโทษ! แต่คุณให้มาเองนี่',
+            correct: true,
+            response: 'ก็... ก็ไม่ได้หมายความว่าชั้นจะให้มาอ่านตรงนี้ซักหน่อย!',
+            affectionChange: 5,
+          },
+          {
+            id: '2',
+            text: 'อืม... มันน่าสนใจนะ',
+            correct: true,
+            response: '...อะไรนะ? น่าสนใจ?',
+            affectionChange: 10,
+          },
+          {
+            id: '3',
+            text: 'ผมแค่หา flag เฉยๆ ไม่ได้อ่านจริงๆ',
+            correct: true,
+            response: 'ระ เหรอ...',
+            affectionChange: -5,
+          },
+        ],
+      },
+      {
+        character: 'vera',
+        text: 'เฮ้อ... ก็ดีแล้วค่ะ อย่างน้อยคุณก็ซื่อสัตย์',
+      },
+      {
+        character: 'vera',
+        text: 'รู้ไหม... ทำไมฉันถึงชอบเรื่อง password',
+      },
+      {
+        character: 'vera',
+        text: 'เพราะมันเหมือนความรู้สึก บางอย่างเราซ่อนไว้ แต่ก็อยากให้คนที่ใช่... ค้นพบมัน',
+      },
+      {
+        text: 'Yuki มองออกไปนอกหน้าต่าง',
+      },
+      {
+        character: 'vera',
+        text: 'แต่รหัสผ่านที่เปราะบาง... ก็เหมือนหัวใจที่เปราะบาง ถูกทำร้ายได้ง่ายเกินไป',
+      },
+      {
+        character: 'vera',
+        text: 'เลยต้องเรียนรู้ที่จะทำให้มันแข็งแกร่งขึ้น... เข้าใจไหม?',
+      },
+      {
+        text: '...',
+        isChoice: true,
+        choices: [
+          {
+            id: '1',
+            text: 'ก็เข้าใจนะ และฉันคิดว่า... password ที่ซับซ้อนที่สุดในโลก ก็คงเป็นความรู้สึกของคนสินะ',
+            correct: true,
+            response: '...หึ คุณนี่ก็พูดได้ดีอยู่นะเนี้ย',
+            affectionChange: 5,
+          },
+        ],
+      },
+      {
+        character: 'vera',
+        text: 'ถ้างั้น... วันพรุ่งนี้มาเจอกันที่ห้องแล็บ มีอะไรจะให้ดู',
+      },
+      {
+        text: 'วันต่อมา',
+      },
+      {
+        character: 'vera',
+        text: '/เปิดคอมพิวเตอร์/ นี่คือฐานข้อมูล password ที่ถูกเก็บแบบ hashed',
+      },
+      {
+        character: 'vera',
+        text: 'ลองดูว่าคุณถอดรหัสได้ไหม... แต่ครั้งนี้ยากกว่าเดิมนะ',
+      },
+      {
+        text: 'พิมพ์คำตอบของคุณ...',
+        isChallenge: true,
+        challenge: {
+          type: 'fill_in_the_blank',
+          correctAnswer: 'sakura',
+          response: 'เก่งมาก! คุณหาคำตอบได้... แต่รู้ไหมว่าทำไม MD5 ถึงอันตราย?',
+          affectionChange: 10,
+          incorrectResponse: 'ยังไม่ถูกนะ... ลองพยายามมากกว่านี้หน่อยสิ',
+          incorrectAffectionChange: -10,
+          hint: 'My favorite flower blooms in spring... start with s end with a',
+          downloadFile: '/public/files/users_db.txt',
+        },
+      },
+      {
+        character: 'vera',
+        text: 'เพราะมัน hash เร็วเกินไป! Attacker สามารถลอง hash ได้หลายล้านครั้งต่อวินาที',
+      },
+      {
+        character: 'vera',
+        text: 'และที่สำคัญกว่า... ไม่มี salt ทำให้เราใช้ rainbow table โจมตีได้',
       },
       {
         text: 'จากรายการด้านล่าง มีการยืนยันตัวตนแบบไหนถูกใช้บ้าง? (เลือกทั้งหมดที่ถูกต้อง)',
