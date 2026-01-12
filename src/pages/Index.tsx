@@ -1,4 +1,4 @@
-import { useState , useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Stage } from '@/types/game';
 import TitleScreen from '@/components/game/TitleScreen';
 import StageSelect from '@/components/game/StageSelect';
@@ -23,43 +23,60 @@ const Index = () => {
     authorization: 0,
   });
 
-    useEffect(() => {
-  const params = new URLSearchParams(window.location.search);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has('next-stage')) return;
 
-  if (!params.has('next-stage')) return;
+    const saved = sessionStorage.getItem('ctf-progress');
+    let completed: Stage[] = [];
+    if (saved) {
+      const data = JSON.parse(saved);
+      completed = data.completedStages || [];
+    }
 
-  fetch('/api/next-stage.json')
-    .then(res => res.json())
-    .then(data => {
-      if (data.stage === 'authorization') {
-        setCurrentStage('authorization');
-        setScreen('playing');
-      }
-    })
-    .catch(() => {});
-}, []);
+    // เช็คว่า Stage ก่อนหน้า 2 ด่านเสร็จแล้ว
+    const allPreviousDone = ['cryptography', 'authentication'].every(stage =>
+      completed.includes(stage as Stage)
+    );
 
-useEffect(() => {
-  const saved = sessionStorage.getItem('ctf-progress');
-  if (saved) {
-    const data = JSON.parse(saved);
-    setCompletedStages(data.completedStages || []);
-    setAffection(data.affection || {});
-    setStageCompletionCount(data.stageCompletionCount || {});
-  }
-}, []);
+    if (allPreviousDone) {
+      setCurrentStage('authorization');
+      setScreen('playing');
+    } else {
+      alert('ต้องทำ Stage ก่อนหน้าให้ครบก่อนถึงจะเข้า Stage 3 ได้');
+      setScreen('select');
+    }
+  }, []);
 
-useEffect(() => {
-  sessionStorage.setItem(
-    'ctf-progress',
-    JSON.stringify({
-      completedStages,
-      affection,
-      stageCompletionCount,
-    })
-  );
-}, [completedStages, affection, stageCompletionCount]);
 
+  useEffect(() => {
+    const saved = sessionStorage.getItem('ctf-progress');
+    if (saved) {
+      const data = JSON.parse(saved);
+      setCompletedStages(data.completedStages || []);
+      setAffection(data.affection || {});
+      setStageCompletionCount(data.stageCompletionCount || {});
+    }
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem(
+      'ctf-progress',
+      JSON.stringify({
+        completedStages,
+        affection,
+        stageCompletionCount,
+      })
+    );
+  }, [completedStages, affection, stageCompletionCount]);
+
+  useEffect(() => {
+    fetch('/?next-stage', { cache: 'no-store' }).catch(() => { });
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem('To continue', '/?next-stage');
+  }, []);
 
   const handleStart = () => {
     setScreen('select');
@@ -78,12 +95,12 @@ useEffect(() => {
     };
 
     const charId = characterIds[currentStage];
-    
+
     setAffection(prev => ({
       ...prev,
       [charId]: finalAffection,
     }));
-    
+
     // Increment completion count for the current stage
     setStageCompletionCount(prev => ({
       ...prev,
@@ -118,13 +135,13 @@ useEffect(() => {
   //   };
 
   //   const charId = characterIds[stageToSkip];
-    
+
   //   // Set max affection for skipped stage
   //   setAffection(prev => ({
   //     ...prev,
   //     [charId]: 100,
   //   }));
-    
+
   //   // Increment completion count
   //   setStageCompletionCount(prev => ({
   //     ...prev,
@@ -143,6 +160,7 @@ useEffect(() => {
   // // DEV: End of skip function
 
   const handleRestart = () => {
+    sessionStorage.removeItem('ctf-progress');
     setCompletedStages([]);
     setAffection({
       cipher: 0,
@@ -184,9 +202,9 @@ useEffect(() => {
           currentStage={currentStage}
           onSelectStage={handleSelectStage}
           affection={affection}
-          // DEV: Prop for skipping stages
-          //onStageSkip={handleStageSkip}
-          // DEV: End of skip prop
+        // DEV: Prop for skipping stages
+        //onStageSkip={handleStageSkip}
+        // DEV: End of skip prop
         />
       )}
       {screen === 'playing' && (
