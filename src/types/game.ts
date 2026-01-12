@@ -36,6 +36,7 @@ export interface Challenge {
   incorrectResponse: string;
   incorrectAffectionChange: number;
   hint?: string;
+  downloadFile?: string;
   options?: { id: string; text: string }[];
 }
 

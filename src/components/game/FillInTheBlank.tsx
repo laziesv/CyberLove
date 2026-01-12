@@ -4,7 +4,7 @@ import { Challenge } from '@/types/game';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import { Lightbulb } from 'lucide-react';
+import { Lightbulb, Download } from 'lucide-react';
 
 interface FillInTheBlankProps {
   challenge: Challenge;
@@ -59,6 +59,17 @@ const FillInTheBlank = ({ challenge, onComplete }: FillInTheBlankProps) => {
             aria-label="แสดงคำใบ้"
           >
             <Lightbulb className="w-5 h-5" />
+          </Button>
+        )}
+        {challenge.downloadFile && (
+          <Button
+            variant="outline"
+            size="icon"
+            asChild
+          >
+            <a href={challenge.downloadFile} download aria-label="ดาวน์โหลดไฟล์">
+              <Download className="w-5 h-5" />
+            </a>
           </Button>
         )}
       </div>
