@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Stage, Choice } from '@/types/game';
+import { Stage, Choice, Challenge } from '@/types/game';
 import { dialogs } from '@/data/dialogs';
 import { characters } from '@/data/characters';
 import DialogBox from './DialogBox';
@@ -15,6 +15,7 @@ import authorizationBg from '@/assets/background/authorization.jpg';
 
 interface GameStageProps {
   stage: Stage;
+  stageLevel: number;
   affection: number;
   onComplete: (finalAffection: number) => void;
   onBack: () => void;
@@ -28,13 +29,17 @@ const stageBackgrounds: Record<Stage, string> = {
 };
 
 
-const GameStage = ({ stage, affection: initialAffection, onComplete, onBack }: GameStageProps) => {
+const GameStage = ({ stage, stageLevel, affection: initialAffection, onComplete, onBack }: GameStageProps) => {
   const [currentDialogIndex, setCurrentDialogIndex] = useState(0);
   const [affection, setAffection] = useState(initialAffection);
   const [showResponse, setShowResponse] = useState<string | null>(null);
   const [emotion, setEmotion] = useState<'neutral' | 'happy' | 'sad'>('neutral');
+  const [challengeFailed, setChallengeFailed] = useState(false);
 
-  const stageDialogs = dialogs[stage];
+  // Select the dialog set based on the stageLevel
+  const dialogSet = dialogs[stage];
+  const stageDialogs = dialogSet[stageLevel] || dialogSet[0]; // Fallback to level 0
+
   const currentDialog = stageDialogs[currentDialogIndex];
   const character = characters.find(c => c.stage === stage);
 
@@ -44,12 +49,19 @@ const GameStage = ({ stage, affection: initialAffection, onComplete, onBack }: G
     setAffection(initialAffection);
     setShowResponse(null);
     setEmotion('neutral');
-  }, [stage, initialAffection]);
+    setChallengeFailed(false);
+  }, [stage, initialAffection, stageLevel]);
 
   const handleNext = () => {
     if (showResponse) {
       setShowResponse(null);
       setEmotion('neutral');
+
+      if (challengeFailed) {
+        setChallengeFailed(false);
+        // Do not advance, stay on the same challenge
+        return;
+      }
     }
 
     if (currentDialogIndex < stageDialogs.length - 1) {
@@ -65,6 +77,19 @@ const GameStage = ({ stage, affection: initialAffection, onComplete, onBack }: G
     setAffection(newAffection);
     setShowResponse(choice.response);
     setEmotion(choice.correct ? 'happy' : 'sad');
+  };
+
+  const handleChallengeComplete = (correct: boolean, challenge: Challenge) => {
+    const affectionChange = correct ? challenge.affectionChange : challenge.incorrectAffectionChange;
+    const response = correct ? challenge.response : challenge.incorrectResponse;
+    
+    const newAffection = Math.max(0, affection + affectionChange);
+    setAffection(newAffection);
+    setShowResponse(response);
+    setEmotion(correct ? 'happy' : 'sad');
+    if (!correct) {
+      setChallengeFailed(true);
+    }
   };
 
   if (!currentDialog || !character) return null;
@@ -137,6 +162,7 @@ const GameStage = ({ stage, affection: initialAffection, onComplete, onBack }: G
         dialog={currentDialog}
         onNext={handleNext}
         onChoice={handleChoice}
+        onChallengeComplete={handleChallengeComplete}
         characterId={currentDialog.character}
         showResponse={showResponse}
       />

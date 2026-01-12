@@ -1,4 +1,5 @@
 export type Stage = 'cryptography' | 'authentication' | 'authorization';
+export type ChallengeType = 'caesar_cipher' | 'fill_in_the_blank' | 'multi_select' | 'scytale';
 
 export interface Character {
   id: string;
@@ -14,6 +15,8 @@ export interface DialogLine {
   text: string;
   isChoice?: boolean;
   choices?: Choice[];
+  isChallenge?: boolean;
+  challenge?: Challenge;
 }
 
 export interface Choice {
@@ -22,6 +25,19 @@ export interface Choice {
   correct: boolean;
   response: string;
   affectionChange: number;
+}
+
+export interface Challenge {
+  type: ChallengeType;
+  encryptedText?: string; // Optional for non-cipher challenges
+  correctAnswer: string;
+  response: string;
+  affectionChange: number;
+  incorrectResponse: string;
+  incorrectAffectionChange: number;
+  hint?: string;
+  downloadFile?: string;
+  options?: { id: string; text: string }[];
 }
 
 export interface GameState {

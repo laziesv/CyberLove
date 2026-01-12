@@ -8,6 +8,9 @@ interface StageSelectProps {
   currentStage: Stage;
   onSelectStage: (stage: Stage) => void;
   affection: Record<string, number>;
+  // DEV: Prop for skipping stages
+  onStageSkip?: (stage: Stage) => void;
+  // DEV: End of skip prop
 }
 
 const stages: { id: Stage; name: string; emoji: string; description: string }[] = [
@@ -31,12 +34,15 @@ const stages: { id: Stage; name: string; emoji: string; description: string }[] 
   },
 ];
 
-const StageSelect = ({ completedStages, currentStage, onSelectStage, affection }: StageSelectProps) => {
+const StageSelect = ({ completedStages, onSelectStage, affection, onStageSkip }: StageSelectProps) => {
   const isStageUnlocked = (stage: Stage): boolean => {
-    const stageIndex = stages.findIndex(s => s.id === stage);
-    if (stageIndex === 0) return true;
-    const prevStage = stages[stageIndex - 1];
-    return completedStages.includes(prevStage.id);
+  if (stage === 'authorization') return false; // fake lock
+
+  const stageIndex = stages.findIndex(s => s.id === stage);
+  if (stageIndex === 0) return true;
+
+  const prevStage = stages[stageIndex - 1];
+  return completedStages.includes(prevStage.id);
   };
 
   const isStageCompleted = (stage: Stage): boolean => {
@@ -157,6 +163,20 @@ const StageSelect = ({ completedStages, currentStage, onSelectStage, affection }
                   </div>
                 )}
               </motion.button>
+              
+              {/* DEV: Skip button for testing */}
+              {onStageSkip && unlocked && !completed && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onStageSkip(stage.id);
+                  }}
+                  className="absolute bottom-2 right-2 text-xs bg-muted/50 text-muted-foreground px-2 py-1 rounded hover:bg-muted"
+                >
+                  Skip
+                </button>
+              )}
+              {/* DEV: End of skip button */}
             </motion.div>
           );
         })}

@@ -1,12 +1,17 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { DialogLine, Choice } from '@/types/game';
+import { DialogLine, Choice, Challenge } from '@/types/game';
 import { characters } from '@/data/characters';
 import { useState, useEffect } from 'react';
+import CaesarCipher from './CaesarCipher';
+import FillInTheBlank from './FillInTheBlank';
+import MultiSelectChallenge from './MultiSelectChallenge';
+import  ScytaleCipher  from './ScytaleCipher';
 
 interface DialogBoxProps {
   dialog: DialogLine;
   onNext: () => void;
   onChoice: (choice: Choice) => void;
+  onChallengeComplete: (correct: boolean, challenge: Challenge) => void;
   characterId?: string;
   showResponse?: string | null;
 }
@@ -15,6 +20,7 @@ const DialogBox = ({
   dialog,
   onNext,
   onChoice,
+  onChallengeComplete,
   characterId,
   showResponse,
 }: DialogBoxProps) => {
@@ -27,7 +33,44 @@ const DialogBox = ({
 
   const textToDisplay = showResponse || dialog.text;
 
+  const renderChallenge = (challenge: Challenge) => {
+    switch (challenge.type) {
+      case 'caesar_cipher':
+        return (
+          <CaesarCipher
+            challenge={challenge}
+            onComplete={(correct) => onChallengeComplete(correct, challenge)}
+          />
+        );
+      case 'fill_in_the_blank':
+        return (
+          <FillInTheBlank
+            challenge={challenge}
+            onComplete={(correct) => onChallengeComplete(correct, challenge)}
+          />
+        );
+      case 'multi_select':
+        return (
+          <MultiSelectChallenge
+            challenge={challenge}
+            onComplete={(correct) => onChallengeComplete(correct, challenge)}
+          />
+        );
+        case 'scytale':
+        return (
+          <ScytaleCipher
+            challenge={challenge}
+            onComplete={(correct) => onChallengeComplete(correct, challenge)}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
   useEffect(() => {
+    if (dialog.isChallenge && !showResponse) return;
+
     setDisplayedText('');
     setIsTyping(true);
     let index = 0;
@@ -43,9 +86,10 @@ const DialogBox = ({
     }, 30);
 
     return () => clearInterval(timer);
-  }, [textToDisplay]);
+  }, [textToDisplay, dialog.isChallenge, showResponse]);
 
   const handleClick = () => {
+    if (dialog.isChallenge && !showResponse) return;
     if (isTyping) {
       setDisplayedText(textToDisplay);
       setIsTyping(false);
@@ -54,6 +98,27 @@ const DialogBox = ({
     }
   };
 
+  if (dialog.isChallenge && dialog.challenge && !showResponse) {
+    return (
+      <div className="fixed inset-0 flex flex-col items-center justify-center z-50 p-4">
+        <motion.div 
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="mb-4 text-center"
+        >
+          <p className="text-2xl font-bold text-white bg-black/30 p-4 rounded-lg">{dialog.text}</p>
+        </motion.div>
+        <motion.div 
+          initial={{ scale: 0.9, opacity: 0 }} 
+          animate={{ scale: 1, opacity: 1 }}
+          className="w-full flex justify-center"
+        >
+          {renderChallenge(dialog.challenge)}
+        </motion.div>
+      </div>
+    );
+  }
+  
   return (
     <div className="fixed bottom-0 left-0 right-0 p-4 md:p-8 z-50">
       <motion.div
