@@ -1,9 +1,0 @@
-# Leaked Database - Secure Hearts Academy
-# Format: username:md5_hash
-admin:5f4dcc3b5aa765d61d8327deb882cf99
-yuki_h:e10adc3949ba59abbe56e057f20f883e
-student1:098f6bcd4621d373cade4e832627b4f6
-FLAG_USER:149afd631693c895f81e508eb5aaef37
-
-# Hint from Yuki's diary:
-# "My favorite flower blooms in spring... start with 's' end with 'a' "
