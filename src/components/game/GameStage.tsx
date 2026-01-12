@@ -82,7 +82,7 @@ const GameStage = ({ stage, stageLevel, affection: initialAffection, onComplete,
   const handleChallengeComplete = (correct: boolean, challenge: Challenge) => {
     const affectionChange = correct ? challenge.affectionChange : challenge.incorrectAffectionChange;
     const response = correct ? challenge.response : challenge.incorrectResponse;
-    
+
     const newAffection = Math.max(0, affection + affectionChange);
     setAffection(newAffection);
     setShowResponse(response);
@@ -104,7 +104,8 @@ const GameStage = ({ stage, stageLevel, affection: initialAffection, onComplete,
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         onClick={onBack}
-        className="absolute top-6 left-6 z-50 flex items-center gap-2 px-4 py-2 bg-card/50 backdrop-blur-sm rounded-full border border-border hover:border-love-pink transition-colors"
+        onPointerDownCapture={(e) => e.stopPropagation()}
+        className="absolute top-6 left-6 z-[9999] pointer-events-auto flex items-center gap-2 px-4 py-2 bg-card/50 backdrop-blur-sm rounded-full border border-border hover:border-love-pink transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         <span>กลับ</span>

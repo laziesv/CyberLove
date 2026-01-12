@@ -40,7 +40,7 @@ const Index = () => {
 }, []);
 
 useEffect(() => {
-  const saved = localStorage.getItem('ctf-progress');
+  const saved = sessionStorage.getItem('ctf-progress');
   if (saved) {
     const data = JSON.parse(saved);
     setCompletedStages(data.completedStages || []);
@@ -50,7 +50,7 @@ useEffect(() => {
 }, []);
 
 useEffect(() => {
-  localStorage.setItem(
+  sessionStorage.setItem(
     'ctf-progress',
     JSON.stringify({
       completedStages,
