@@ -143,6 +143,7 @@ useEffect(() => {
   // DEV: End of skip function
 
   const handleRestart = () => {
+    sessionStorage.removeItem('ctf-progress');
     setCompletedStages([]);
     setAffection({
       cipher: 0,
