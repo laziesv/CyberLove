@@ -256,7 +256,7 @@ export const dialogs: Record<Stage, DialogLine[][]> = {
 
       // --- Fill in / Decode ---
       {
-        text: 'ระบบอนุญาตให้ผู้ใช้ทำได้เฉพาะสิ่งที่จำเป็นต่อหน้าที่เท่านั้น (hint: Base64 "bGVhc3QgcHJpdmlsZWdl")',
+        text: 'ระบบอนุญาตให้ผู้ใช้ทำได้เฉพาะสิ่งที่จำเป็นต่อหน้าที่เท่านั้น \n(hint: Base64 "bGVhc3QgcHJpdmlsZWdl")',
         isChallenge: true,
         challenge: {
           type: 'fill_in_the_blank',
@@ -321,14 +321,14 @@ export const dialogs: Record<Stage, DialogLine[][]> = {
         choices: [
           {
             id: '1',
-            text: 'Yes',
+            text: 'ได้',
             correct: false,
             response: 'ผิด 🚫 ระดับสิทธิ์ไม่พอ',
             affectionChange: -10,
           },
           {
             id: '2',
-            text: 'No',
+            text: 'ไม่ได้',
             correct: true,
             response: 'ถูกต้อง! 🚫 ตาม Bell-LaPadula',
             affectionChange: 20,
