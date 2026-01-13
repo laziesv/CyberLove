@@ -31,11 +31,7 @@ export const dialogs: Record<Stage, DialogLine[][]> = {
       {
         character: 'cipher',
         text: 'การเข้ารหัสแบบ Scytale คือการสลับตำแหน่ง (Transposition) โดยใช้ขนาดของเส้นผ่านศูนย์กลางเป็นกุญแจสำคัญค่ะ',
-      }
-
-    ],
-    // Level 1 - New Dialog Set
-    [
+      },
       {
         character: 'cipher',
         text: 'เก่งมากที่ผ่านด่านแรกมาได้! แต่นี่ยังเป็นแค่น้ำจิ้มนะ...',
@@ -66,6 +62,7 @@ export const dialogs: Record<Stage, DialogLine[][]> = {
         text: 'Caesar Cipher เป็นพื้นฐานของการเข้ารหัสแบบแทนที่ (Substitution) ซึ่งต่อยอดไปสู่ระบบที่ซับซ้อนกว่านี้ในอนาคตค่ะ',
       },
     ],
+    // Level 1 - New Dialog Set
   ],
   authentication: [
     [
