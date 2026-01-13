@@ -147,7 +147,7 @@ const StageSelect = ({ completedStages, onSelectStage, affection, onStageSkip }:
                   </div>
                 )}
 
-                {character && (
+                {character && charAffection > 0 && (
                   <div className="mt-4">
                     <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
                       <span>💕 Affection</span>
